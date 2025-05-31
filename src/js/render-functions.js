@@ -1,7 +1,6 @@
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
-// ===== ВСТРОЕННЫЕ CSS =====
 const style = document.createElement('style');
 style.textContent = `
   h1, h2, h3, h4, h5, h6, p {
@@ -174,7 +173,6 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// ===== SimpleLightbox подключение =====
 const gallery = document.querySelector('.gallery');
 let lightbox = new SimpleLightbox('.gallery a', {
   captions: true,
@@ -182,12 +180,12 @@ let lightbox = new SimpleLightbox('.gallery a', {
   captionDelay: 250,
 });
 
-// ===== Очистка галереи =====
+
 export function clearGallery() {
   gallery.innerHTML = '';
 }
 
-// ===== Рендер изображений =====
+
 export function renderImages(images) {
   clearGallery();
 
