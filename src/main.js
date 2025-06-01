@@ -1,39 +1,33 @@
-import { renderImages } from "./js/render-functions";
+import { renderImages, showLoader, hideLoader } from "./js/render-functions";
 import { fetchImages } from "./js/pixabay-api";
 
 import iziToast from "izitoast";
 import 'izitoast/dist/css/iziToast.min.css';
 
-const form = document.querySelector(`form`);
-const gallery = document.querySelector(`.gallery`);
-const loader = document.querySelector(`.loader`);
+const form = document.querySelector('form');
 
-form.addEventListener(`submit`, async(event)=>{
-    event.preventDefault();
+form.addEventListener('submit', async (event) => {
+  event.preventDefault();
 
-    const query = event.target.elements[`search-text`].value.trim();
-    if (!query){
-        iziToast.error({title: `Error`, message: `Please enter a search query!`});
-        return;
+  const query = event.target.elements['search-text'].value.trim();
+  if (!query) {
+    iziToast.error({ title: 'Error', message: 'Please enter a search query!' });
+    return;
+  }
+
+  showLoader(); // используем функцию из render-functions.js
+
+  try {
+    const images = await fetchImages(query);
+
+    if (images.length === 0) {
+      iziToast.warning({ title: 'Oops!', message: 'No images found. Try again!' });
+    } else {
+      renderImages(images);
     }
-
-    gallery.innerHTML = ``;
-    loader.classList.add(`visible`);
-
-
-    try{
-        const images = await fetchImages(query);
-        console.log(images);
-        
-        if(images.length === 0){
-            iziToast.warning({title: `Oops!`, message: `No images found. Try again!`});
-        }else{
-            renderImages(images);
-        }
-    }catch(error){
-        iziToast.error({title: `Error`, message: ` Failed to fetch images. Try again later!`});
-    }finally{
-        loader.classList.remove(`visible`);
-    }
-
+  } catch (error) {
+    iziToast.error({ title: 'Error', message: 'Failed to fetch images. Try again later!' });
+  } finally {
+    hideLoader(); // тоже используем экспортированную функцию
+  }
 });
