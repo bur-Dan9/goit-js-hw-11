@@ -19,6 +19,8 @@ form.addEventListener(`submit`, async(event)=>{
 
     gallery.innerHTML = ``;
     loader.classList.add(`visible`);
+
+
     try{
         const images = await fetchImages(query);
         console.log(images);
